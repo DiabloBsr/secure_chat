@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+/* -----------------------------------------------------------------------------
+   Design tokens — éditorial chiffré
+   Light = ivoire chaud / encre profonde
+   Dark  = encre profonde / crème chaude
+   Accent = jade profond (sealed-envelope vibe)
+----------------------------------------------------------------------------- */
+
+:root {
+  --bg: #f6f2ea;
+  --bg-elev: #fbf8f1;
+  --surface: #ffffff;
+  --ink: #15140f;
+  --ink-soft: #3a372f;
+  --muted: #76705f;
+  --line: #e5dfd0;
+  --line-strong: #d6cfbb;
+  --accent: #1f5b4d;
+  --accent-soft: #d8e6e0;
+  --accent-ink: #fbf8f1;
+  --danger: #8a2c2c;
+  --danger-soft: #f5e3df;
+  --warn: #8a6b1e;
+  --warn-soft: #f8edd0;
+  --grain-opacity: 0.025;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0e0c;
+    --bg-elev: #15151200;
+    --surface: #181815;
+    --ink: #efebe1;
+    --ink-soft: #cac6bb;
+    --muted: #807b6e;
+    --line: #2a2925;
+    --line-strong: #36352f;
+    --accent: #76b8a3;
+    --accent-soft: #1a2a26;
+    --accent-ink: #0e0e0c;
+    --danger: #d68a8a;
+    --danger-soft: #2a1818;
+    --warn: #d6b865;
+    --warn-soft: #2a2412;
+    --grain-opacity: 0.05;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elev: var(--bg-elev);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
+}
+
+@layer base {
+  html {
+    color-scheme: light dark;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Grain overlay — subtil, fixe, derrière le contenu */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: var(--grain-opacity);
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 200px 200px;
+  }
+
+  /* Selection refined */
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  /* Inputs : reset focus ring sur l'accent */
+  input,
+  textarea,
+  button {
+    font-family: inherit;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Utilitaires personnalisés
+----------------------------------------------------------------------------- */
+@utility hairline {
+  border: 1px solid var(--line);
+}
+@utility hairline-strong {
+  border: 1px solid var(--line-strong);
+}
+@utility small-caps {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.14em;
+}
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Scrollbar discret */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 999px;
+  border: 3px solid var(--bg);
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Animation d'entrée pour les blocs (page load staggered) */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-up {
+  animation: fade-up 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Curseur d'enregistrement caret pour input */
+input,
+textarea {
+  caret-color: var(--accent);
+}
